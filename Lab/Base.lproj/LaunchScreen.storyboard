@@ -17,13 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Ha2-jX-lGS">
-                                <rect key="frame" x="79" y="337.66666666666669" width="226" height="109"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Ha2-jX-lGS">
+                                <rect key="frame" x="84" y="351" width="225" height="110"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="225" id="fIS-kg-JiL"/>
+                                    <constraint firstAttribute="width" secondItem="Ha2-jX-lGS" secondAttribute="height" multiplier="45:22" id="oEj-zI-65o"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course Account Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uew-Tw-nRX">
-                                <rect key="frame" x="90" y="454" width="213" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Course Account Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uew-Tw-nRX">
+                                <rect key="frame" x="91.666666666666686" y="473" width="210" height="25"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                                 <color key="textColor" name="Pale Sky"/>
                                 <nil key="highlightedColor"/>
@@ -31,6 +33,12 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="uew-Tw-nRX" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="IkN-I0-9dV"/>
+                            <constraint firstItem="uew-Tw-nRX" firstAttribute="top" secondItem="Ha2-jX-lGS" secondAttribute="bottom" constant="12" id="gYe-hy-aiB"/>
+                            <constraint firstItem="Ha2-jX-lGS" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="if5-fb-ueG"/>
+                            <constraint firstItem="Ha2-jX-lGS" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-20" id="mif-75-Fpn"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>

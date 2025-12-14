@@ -23,31 +23,23 @@ class ProfileViewController: UIViewController {
 
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
-   
     }
-    
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        print("Profile Appeared: Fetching latest data...")
-        
         if let newName = UserDefaults.standard.string(forKey: "userLogin") {
             self.currentName = newName
-            print("Current user from session: \(newName)")
         }
-        
         
         fullusername.text = self.currentName
         usernameLBL.text = self.currentName
         
-      
         fetchProfileData()
     }
 
     func fetchProfileData() {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
-
    
         request.predicate = NSPredicate(format: "name ==[c] %@", currentName)
         
@@ -59,13 +51,8 @@ class ProfileViewController: UIViewController {
                 
                 let email = dataUser.value(forKey: "email") as? String ?? "-"
                 
-                
                 emailLBL.text = email
                 accountTypeLBL.text = "Customer"
-                
-                print("Profile data updated successfully for: \(currentName)")
-            } else {
-                print("User '\(currentName)' not found in database")
             }
         } catch {
             print("Failed to fetch profile: \(error)")
@@ -81,17 +68,12 @@ class ProfileViewController: UIViewController {
             if let destinationVC = segue.destination as? CustomerEditViewController {
                 
                 destinationVC.usernames = usernameLBL.text ?? ""
-                
-                print("Sending username to Edit Page: \(destinationVC.usernames)")
             }
         }
     }
     
     @IBAction func logOutBTN(_ sender: Any) {
-       
         UserDefaults.standard.removeObject(forKey: "userLogin")
-        
-        print("Logout Success")
         
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }

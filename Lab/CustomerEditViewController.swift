@@ -25,18 +25,14 @@ class CustomerEditViewController: UIViewController {
         context = appDelegate.persistentContainer.viewContext
     
         var namer = ""
-        
       
         if let names = UserDefaults.standard.string(forKey: "userLogin") {
             namer = names
         }
-        // 2. Cek Operan
         else if !usernames.isEmpty {
-            print("🔍 Sumber 2: Nama ditemukan dari Operan Profile: \(usernames)")
             namer = usernames
         }
         
-        // 3. Cari Data
         if !namer.isEmpty {
             fetchCurrentUserData(name: namer)
         } else {
@@ -76,7 +72,6 @@ class CustomerEditViewController: UIViewController {
             return
         }
         
-     
         userToUpdate.setValue(newName, forKey: "name")
         userToUpdate.setValue(newEmail, forKey: "email")
         userToUpdate.setValue(newPassword, forKey: "password")
@@ -84,7 +79,6 @@ class CustomerEditViewController: UIViewController {
         do {
             try context.save()
             
-
             UserDefaults.standard.set(newName, forKey: "userLogin")
             
             let alert = UIAlertController(title: "Success", message: "Profile Updated!", preferredStyle: .alert)
@@ -99,7 +93,6 @@ class CustomerEditViewController: UIViewController {
             present(alert, animated: true)
             
         } catch {
-            print("Failed: \(error)")
             showAlert(message: "Failed to save")
         }
     }

@@ -17,7 +17,6 @@ class RegisterViewController: UIViewController {
     }
     
     @IBAction func signUpBTN(_ sender: Any) {
-
         if nameTF.text?.isEmpty == true ||
            emailTF.text?.isEmpty == true ||
            passwordTF.text?.isEmpty == true ||
@@ -29,14 +28,12 @@ class RegisterViewController: UIViewController {
         let validate = passwordValidation(password: passwordTF.text!, passwordConfirmation: confirmPasswordTF.text!)
         
         if validate {
-            // Cek apakah email sudah terdaftar
             if isEmailExists(email: emailTF.text!) {
                 showAlert(message: "Email sudah terdaftar! Silakan gunakan email lain atau login.")
                 return
             }
             
             if insertUser() {
-                // Clear semua text field setelah berhasil
                 nameTF.text = ""
                 emailTF.text = ""
                 passwordTF.text = ""
@@ -47,34 +44,28 @@ class RegisterViewController: UIViewController {
                                               preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                    
                    
                     if let navigation = self.navigationController {
                         navigation.popViewController(animated: true)
                     }
-
                     else {
                         self.dismiss(animated: true, completion: nil)
                     }
-                    
                 }))
  
                 self.present(alert, animated: true)
             }
         } else {
-            showAlert(message: "password and confirmation not same.")
+            showAlert(message: "Password and confirmation password is not same.")
         }
     }
     
-   
     func insertUser() -> Bool {
         let name = nameTF.text
         let email = emailTF.text
         let password = passwordTF.text
-        
       
         guard let entity = NSEntityDescription.entity(forEntityName: "Users", in: context) else {
-            print("Error: Entity 'Users' not found")
             return false
         }
         
@@ -87,10 +78,9 @@ class RegisterViewController: UIViewController {
         
         do {
             try context.save()
-            print("Data stored!")
+            
             return true
         } catch {
-            print("Failed: \(error)")
             return false
         }
     }
@@ -107,7 +97,6 @@ class RegisterViewController: UIViewController {
             let result = try context.fetch(request)
             return result.count > 0
         } catch {
-            print("Error checking email: \(error)")
             return false
         }
     }
@@ -125,5 +114,4 @@ class RegisterViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }
     }
-
 }
