@@ -17,11 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Ha2-jX-lGS">
-                                <rect key="frame" x="76" y="320" width="240" height="128"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Ha2-jX-lGS">
+                                <rect key="frame" x="79" y="337.66666666666669" width="226" height="109"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Course Account Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uew-Tw-nRX">
-                                <rect key="frame" x="91" y="439" width="210" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course Account Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uew-Tw-nRX">
+                                <rect key="frame" x="90" y="454" width="213" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                                 <color key="textColor" name="Pale Sky"/>
                                 <nil key="highlightedColor"/>
@@ -29,20 +31,11 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="uew-Tw-nRX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="321" id="M9f-P1-cOd"/>
-                            <constraint firstItem="Ha2-jX-lGS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="202" id="Nf6-dt-71q"/>
-                            <constraint firstItem="Ha2-jX-lGS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="76" id="dmU-Gd-6ij"/>
-                            <constraint firstItem="Ha2-jX-lGS" firstAttribute="centerX" secondItem="uew-Tw-nRX" secondAttribute="centerX" id="f2A-iA-abf"/>
-                            <constraint firstItem="Ha2-jX-lGS" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="hNU-co-pUn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ha2-jX-lGS" secondAttribute="bottom" constant="336" id="kml-5s-q7r"/>
-                            <constraint firstItem="uew-Tw-nRX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="91" id="riI-NE-c1Q"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.671755725190835" y="374.64788732394368"/>
         </scene>
     </scenes>
     <resources>

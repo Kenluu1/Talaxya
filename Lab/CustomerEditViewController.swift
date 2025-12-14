@@ -10,7 +10,7 @@ import CoreData
 
 class CustomerEditViewController: UIViewController {
 
-    @IBOutlet weak var UsernameTF: UITextField!
+    @IBOutlet weak var nameTF: UITextField!
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     
@@ -46,13 +46,13 @@ class CustomerEditViewController: UIViewController {
     
     func fetchCurrentUserData(name: String) {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
-        request.predicate = NSPredicate(format: "username ==[c] %@", name)
+        request.predicate = NSPredicate(format: "name ==[c] %@", name)
         
         do {
             let result = try context.fetch(request)
             if result.count > 0 {
                 currentUserObject = result[0] as? NSManagedObject
-                UsernameTF.text = currentUserObject?.value(forKey: "username") as? String
+                nameTF.text = currentUserObject?.value(forKey: "name") as? String
                 emailTF.text = currentUserObject?.value(forKey: "email") as? String
                 passwordTF.text = currentUserObject?.value(forKey: "password") as? String
             } else {
@@ -64,7 +64,7 @@ class CustomerEditViewController: UIViewController {
     }
 
     @IBAction func saveChangesBTN(_ sender: Any) {
-        guard let newName = UsernameTF.text, !newName.isEmpty,
+        guard let newName = nameTF.text, !newName.isEmpty,
               let newEmail = emailTF.text, !newEmail.isEmpty,
               let newPassword = passwordTF.text, !newPassword.isEmpty else {
             showAlert(message: "Every column must be filled")
@@ -77,7 +77,7 @@ class CustomerEditViewController: UIViewController {
         }
         
      
-        userToUpdate.setValue(newName, forKey: "username")
+        userToUpdate.setValue(newName, forKey: "name")
         userToUpdate.setValue(newEmail, forKey: "email")
         userToUpdate.setValue(newPassword, forKey: "password")
         

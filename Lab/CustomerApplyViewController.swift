@@ -16,7 +16,6 @@ class ApplyViewController: UIViewController {
     
 
     var context: NSManagedObjectContext!
- 
     var currentUserName: String = ""
     
     override func viewDidLoad() {
@@ -25,9 +24,60 @@ class ApplyViewController: UIViewController {
         // Setup Context
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-
-        print("📝 Halaman Apply dibuka oleh: \(currentUserName)")
+        if let newName = UserDefaults.standard.string(forKey: "userLogin") {
+            self.currentUserName = newName
+            print("📝 Halaman Apply dibuka oleh: \(currentUserName)")
+        }
+        
+        // Skip check jika flag di-set (kembali dari Status setelah hapus aplikasi)
+        if UserDefaults.standard.bool(forKey: "skipApplyCheck") {
+            UserDefaults.standard.removeObject(forKey: "skipApplyCheck") // Reset flag
+            print("⏭️ Skip check - kembali dari Status setelah hapus aplikasi")
+            return
+        }
+        
+        // Cek apakah user sudah punya aplikasi - redirect langsung tanpa flash
+        DispatchQueue.main.async { [weak self] in
+            self?.checkExistingApplication()
+        }
+    }
+    
+    // MARK: - Check Existing Application
+    func checkExistingApplication() {
+        // Fetch user dulu
+        let userRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
+        userRequest.predicate = NSPredicate(format: "name ==[c] %@", currentUserName)
+        
+        guard let userResult = try? context.fetch(userRequest),
+              userResult.count > 0,
+              let currentUser = userResult[0] as? NSManagedObject else {
+            // User tidak ditemukan, biarkan tampilkan form Apply
+            return
+        }
+        
+        // Fetch aplikasi yang punya relasi dengan user ini
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TrainerApplication")
+        request.predicate = NSPredicate(format: "userOwner == %@", currentUser)
+        
+        do {
+            let result = try context.fetch(request)
+            
+            if result.count > 0 {
+                // User sudah punya aplikasi, redirect ke Status page
+                print("📋 User sudah punya aplikasi, redirect ke Status page")
+                performSegue(withIdentifier: "Apply", sender: self)
+            } else {
+                // User belum punya aplikasi, tampilkan form Apply seperti biasa
+                print("📝 User belum punya aplikasi, tampilkan form")
+            }
+        } catch {
+            print("❌ Error checking application: \(error)")
+        }
     }
     
     @IBAction func applyBTN(_ sender: Any) {
@@ -41,8 +91,8 @@ class ApplyViewController: UIViewController {
             return
         }
         
-      
         saveApplication()
+        performSegue(withIdentifier: "Apply", sender: self)
     }
     
  
@@ -53,35 +103,32 @@ class ApplyViewController: UIViewController {
             return
         }
         
+        // Fetch current user untuk set relasi
+        let userRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
+        userRequest.predicate = NSPredicate(format: "name ==[c] %@", currentUserName)
+        
+        guard let userResult = try? context.fetch(userRequest),
+              userResult.count > 0,
+              let currentUser = userResult[0] as? NSManagedObject else {
+            showAlert(message: "User tidak ditemukan. Silakan login ulang.")
+            return
+        }
+        
         let newApp = NSManagedObject(entity: entity, insertInto: context)
         
-      
+        // Set attributes
         newApp.setValue(specialtyTF.text, forKey: "specialty")
         newApp.setValue(workShiftTF.text, forKey: "workShift")
-        newApp.setValue(ageTF.text, forKey: "age")
+        newApp.setValue(Int(ageTF.text ?? "") ?? 0, forKey: "age")
+        newApp.setValue("Pending", forKey: "applicationStatus")
         
-
-        newApp.setValue(currentUserName, forKey: "applicantName")
-        
-  
-        newApp.setValue("Pending", forKey: "status")
+        // Set relasi ke user (penting untuk admin bisa lihat nama & email)
+        newApp.setValue(currentUser, forKey: "userOwner")
         
         do {
             try context.save()
             print("✅ Lamaran Berhasil Disimpan!")
-            
-            // Munculkan Alert Sukses
-            let alert = UIAlertController(title: "Berhasil",
-                                          message: "Lamaran terkirim! Status saat ini: Pending.",
-                                          preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
- 
-                self.navigationController?.popViewController(animated: true)
-                        
-            }))
-            
-            self.present(alert, animated: true)
+            print("   - User: \(currentUserName)")
             
         } catch {
             print("Gagal simpan: \(error)")

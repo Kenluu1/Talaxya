@@ -15,7 +15,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Buat admin default jika belum ada
+        createDefaultAdminIfNeeded()
+        
         return true
+    }
+    
+    // MARK: - Helper: Create Admin Account
+    func createDefaultAdminIfNeeded() {
+        let context = persistentContainer.viewContext
+        
+        // Cek apakah sudah ada admin
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
+        request.predicate = NSPredicate(format: "role == %@", "Admin")
+        
+        do {
+            let result = try context.fetch(request)
+            
+            // Jika belum ada admin, buat admin default
+            if result.count == 0 {
+                createAdmin(name: "Admin", email: "admin@gmail.com", password: "admin", context: context)
+                print("✅ Admin default berhasil dibuat!")
+                print("   Email: admin@gmail.com")
+                print("   Password: admin")
+            } else {
+                print("ℹ️ Admin sudah ada di database")
+            }
+        } catch {
+            print("Error checking admin: \(error)")
+        }
+    }
+    
+    func createAdmin(name: String, email: String, password: String, context: NSManagedObjectContext) {
+        guard let entity = NSEntityDescription.entity(forEntityName: "Users", in: context) else {
+            print("Error: Entity 'Users' not found")
+            return
+        }
+        
+        let newAdmin = NSManagedObject(entity: entity, insertInto: context)
+        newAdmin.setValue(name, forKey: "name")
+        newAdmin.setValue(email, forKey: "email")
+        newAdmin.setValue(password, forKey: "password")
+        newAdmin.setValue("Admin", forKey: "role")
+        
+        do {
+            try context.save()
+            print("✅ Admin '\(name)' berhasil dibuat!")
+        } catch {
+            print("❌ Gagal membuat admin: \(error)")
+        }
     }
 
     // MARK: UISceneSession Lifecycle

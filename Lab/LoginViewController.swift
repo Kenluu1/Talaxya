@@ -1,13 +1,14 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
 
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     
     var context: NSManagedObjectContext!
-    var Usernames: String = ""
+    var name: String = ""
+    var userRole: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,11 +33,29 @@ class ViewController: UIViewController {
         
       
         if isUserExists(email: email, password: password) {
-            print("Login Success, User: \(self.Usernames)")
-            UserDefaults.standard.set(self.Usernames, forKey: "userLogin")
-            performSegue(withIdentifier: "LoginToHome", sender: self)
+            print("Login Success, User: \(self.name), Role: \(self.userRole)")
+            UserDefaults.standard.set(self.name, forKey: "userLogin")
+            UserDefaults.standard.set(self.userRole, forKey: "userRole")
+            // Clear password field setelah login sukses
+            passwordTF.text = ""
+            
+            // Redirect berdasarkan role
+            print("🔀 Checking role for redirect:")
+            print("   - userRole value: '\(self.userRole)'")
+            print("   - userRole count: \(self.userRole.count)")
+            print("   - Is Admin?: \(self.userRole == "Admin")")
+            
+            if self.userRole.trimmingCharacters(in: .whitespaces) == "Admin" {
+                print("✅ Redirecting to Admin Home")
+                performSegue(withIdentifier: "LoginToAdminHome", sender: self)
+            } else {
+                print("✅ Redirecting to Customer Home")
+                performSegue(withIdentifier: "LoginToHome", sender: self)
+            }
         } else {
             print("Login Failed")
+            // Clear password field setelah login gagal (untuk keamanan)
+            passwordTF.text = ""
             showAlert(message: "Invalid Credentials")
         }
     }
@@ -56,7 +75,21 @@ class ViewController: UIViewController {
       
             if result.count > 0 {
                 let dataUser = result[0] as! NSManagedObject
-                self.Usernames = dataUser.value(forKey: "username") as? String ?? "User"
+                self.name = dataUser.value(forKey: "name") as? String ?? "User"
+                
+                // Get role dan pastikan tidak nil/kosong
+                if let role = dataUser.value(forKey: "role") as? String, !role.isEmpty {
+                    self.userRole = role.trimmingCharacters(in: .whitespaces)
+                } else {
+                    self.userRole = "Customer" // Default jika role kosong/nil
+                }
+                
+                // Debug: Print data yang ditemukan
+                print("🔍 Data dari database:")
+                print("   - Name: \(self.name)")
+                print("   - Email: \(dataUser.value(forKey: "email") as? String ?? "nil")")
+                print("   - Role (raw): '\(dataUser.value(forKey: "role") as? String ?? "nil")'")
+                print("   - Role (processed): '\(self.userRole)'")
                 
                 return true
             } else {
@@ -66,45 +99,6 @@ class ViewController: UIViewController {
         } catch {
             print("Error: \(error)")
             return false
-        }
-    }
- 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-           
-        if segue.identifier == "LoginToHome" {
-             if let tabBarController = segue.destination as? UITabBarController {
-                  
-                 if let tabs = tabBarController.viewControllers {
-                      
-                     for halaman in tabs {
-                          
-                     
-                         if let homeVC = halaman as? CustomerHomeViewController {
-                             homeVC.usernameData = self.Usernames
-                         }
-                         
-                         
-                         else if let nav = halaman as? UINavigationController,
-                                 let homeInNav = nav.topViewController as? CustomerHomeViewController {
-                             homeInNav.usernameData = self.Usernames
-
-                         }
-                         
-                         
-                         if let profileVC = halaman as? ProfileViewController {
-                             profileVC.currentUserName = self.Usernames
-                             
-                         }
-                         
-              
-                         else if let nav = halaman as? UINavigationController,
-                                 let profileInNav = nav.topViewController as? ProfileViewController {
-                             profileInNav.currentUserName = self.Usernames
-                             
-                         }
-                     }
-                 }
-             }
         }
     }
 

@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var emailLBL: UILabel!
     @IBOutlet weak var accountTypeLBL: UILabel!
     
-    var currentUserName: String = ""
+    var currentName: String = ""
     var context: NSManagedObjectContext!
     
     override func viewDidLoad() {
@@ -33,13 +33,13 @@ class ProfileViewController: UIViewController {
         print("Profile Appeared: Fetching latest data...")
         
         if let newName = UserDefaults.standard.string(forKey: "userLogin") {
-            self.currentUserName = newName
+            self.currentName = newName
             print("Current user from session: \(newName)")
         }
         
         
-        fullusername.text = self.currentUserName
-        usernameLBL.text = self.currentUserName
+        fullusername.text = self.currentName
+        usernameLBL.text = self.currentName
         
       
         fetchProfileData()
@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
 
    
-        request.predicate = NSPredicate(format: "username ==[c] %@", currentUserName)
+        request.predicate = NSPredicate(format: "name ==[c] %@", currentName)
         
         do {
             let result = try context.fetch(request)
@@ -63,9 +63,9 @@ class ProfileViewController: UIViewController {
                 emailLBL.text = email
                 accountTypeLBL.text = "Customer"
                 
-                print("Profile data updated successfully for: \(currentUserName)")
+                print("Profile data updated successfully for: \(currentName)")
             } else {
-                print("User '\(currentUserName)' not found in database")
+                print("User '\(currentName)' not found in database")
             }
         } catch {
             print("Failed to fetch profile: \(error)")

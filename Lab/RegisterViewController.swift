@@ -3,7 +3,7 @@ import CoreData
 
 class RegisterViewController: UIViewController {
 
-    @IBOutlet weak var userNameTF: UITextField!
+    @IBOutlet weak var nameTF: UITextField!
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     @IBOutlet weak var confirmPasswordTF: UITextField!
@@ -12,14 +12,13 @@ class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Setup Context (Kunci Gudang)
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
     }
     
     @IBAction func signUpBTN(_ sender: Any) {
 
-        if userNameTF.text?.isEmpty == true ||
+        if nameTF.text?.isEmpty == true ||
            emailTF.text?.isEmpty == true ||
            passwordTF.text?.isEmpty == true ||
            confirmPasswordTF.text?.isEmpty == true {
@@ -30,7 +29,19 @@ class RegisterViewController: UIViewController {
         let validate = passwordValidation(password: passwordTF.text!, passwordConfirmation: confirmPasswordTF.text!)
         
         if validate {
+            // Cek apakah email sudah terdaftar
+            if isEmailExists(email: emailTF.text!) {
+                showAlert(message: "Email sudah terdaftar! Silakan gunakan email lain atau login.")
+                return
+            }
+            
             if insertUser() {
+                // Clear semua text field setelah berhasil
+                nameTF.text = ""
+                emailTF.text = ""
+                passwordTF.text = ""
+                confirmPasswordTF.text = ""
+                
                 let alert = UIAlertController(title: "Berhasil",
                                               message: "Account created successfully, Click OK to proceed to login.",
                                               preferredStyle: .alert)
@@ -57,7 +68,7 @@ class RegisterViewController: UIViewController {
     
    
     func insertUser() -> Bool {
-        let username = userNameTF.text
+        let name = nameTF.text
         let email = emailTF.text
         let password = passwordTF.text
         
@@ -69,9 +80,10 @@ class RegisterViewController: UIViewController {
         
         let newUser = NSManagedObject(entity: entity, insertInto: context)
         
-        newUser.setValue(username, forKey: "username")
+        newUser.setValue(name, forKey: "name")
         newUser.setValue(email, forKey: "email")
         newUser.setValue(password, forKey: "password")
+        newUser.setValue("Customer", forKey: "role")
         
         do {
             try context.save()
@@ -85,6 +97,19 @@ class RegisterViewController: UIViewController {
     
     func passwordValidation(password: String, passwordConfirmation: String) -> Bool {
         return password == passwordConfirmation
+    }
+    
+    func isEmailExists(email: String) -> Bool {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Users")
+        request.predicate = NSPredicate(format: "email == %@", email)
+        
+        do {
+            let result = try context.fetch(request)
+            return result.count > 0
+        } catch {
+            print("Error checking email: \(error)")
+            return false
+        }
     }
     
     func showAlert(message: String) {

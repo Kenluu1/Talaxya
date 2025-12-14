@@ -9,6 +9,11 @@ import UIKit
 
 class AvailableTrainerCell: UITableViewCell {
 
+    @IBOutlet weak var nameLbl: UILabel!
+    @IBOutlet weak var ageLbl: UILabel!
+    @IBOutlet weak var specialtyLbl: UILabel!
+    @IBOutlet weak var workShiftLbl: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
