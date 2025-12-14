@@ -15,6 +15,13 @@ class ViewController: UIViewController {
         context = appDelegate.persistentContainer.viewContext
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        emailTF.text = ""
+        passwordTF.text = ""
+    }
+    
     @IBAction func signInBTN(_ sender: Any) {
         
         guard let email = emailTF.text, !email.isEmpty,
