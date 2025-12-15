@@ -62,7 +62,7 @@ class StatusViewController: UIViewController {
                 messageLbl.text = "No application found"
             }
         } catch {
-            print("❌ Error fetching application: \(error)")
+            print("Error fetching application: \(error)")
         }
     }
     
@@ -124,7 +124,7 @@ class StatusViewController: UIViewController {
         do {
             try context.save()
         } catch {
-            print("❌ Gagal menghapus aplikasi: \(error)")
+            print("Gagal menghapus aplikasi: \(error)")
         }
     }
 }

@@ -62,7 +62,7 @@ class ApplyViewController: UIViewController {
                 performSegue(withIdentifier: "Apply", sender: self)
             }
         } catch {
-            print("❌ Error checking application: \(error)")
+            print("Error checking application: \(error)")
         }
     }
     
