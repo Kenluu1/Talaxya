@@ -69,7 +69,7 @@ class StatusViewController: UIViewController {
     func updateUIForStatus(status: String) {
         switch status {
         case "Pending":
-            messageLbl.text = "Thank you for applying,\nYour application will be\nreviewed by our admin team"
+            messageLbl.text = "Thank you for applying,\nYour application will be\nreviewed by our admin team."
             applyAgainBtn.isHidden = true
             
         case "Rejected":
